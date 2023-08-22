@@ -1,70 +1,77 @@
-import React from 'react'
-import logo from '../assets/logo.png'
-import {
-    MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon
-} from '@heroicons/react/24/outline'
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { MagnifyingGlassIcon, HomeIcon, ShoppingBagIcon } from '@heroicons/react/24/solid'
+import { PaperAirplaneIcon, PlayCircleIcon, HeartIcon, PlusCircleIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { signOut } from 'firebase/auth';
+import { logout, selectOpen, selectUser, setOpen } from '../redux/features/userSlice';
 import { auth } from '../firebase';
-import { useSelector } from 'react-redux';
-import { selectItem } from '../redux/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+function Header() {
 
-function Header({ name }) {
+    const dispatch = useDispatch()
+    const selector = useSelector(selectUser)
+    const modal = useSelector(selectOpen)
     const navigate = useNavigate()
-    const handleSignOut = async () => {
-        await signOut(auth)
-    }
-    const item = useSelector(selectItem)
 
+    const handleSignOut = async () => {
+        await auth.signOut()
+        dispatch(logout())
+        navigate('/signin')
+
+    }
     return (
-        <header>
-            {/* top nav  */}
-            <div className="flex items-center bg-[#131921] p-1 py-2 flex-grow">
-                <div onClick={() => navigate('/')}
-                    className='mt-2 flex items-center flex-grow sm:flex-grow-0 mr-2'>
-                    <img src={logo} alt="logo" width={150}
-                        className='cursor-pointer object-contain px-5 ' />
-                </div>
-                <div className='hidden sm:flex bg-yellow-400 hover:bg-yellow-500 h-10 rounded-md flex-grow cursor-pointer items-center'>
-                    <input type="text" className='p-2 h-full w-6 flex-grow flex-shrink rounded-l-md focus:outline-none px-4' />
-                    <MagnifyingGlassIcon className="h-12 p-4 text-blue-500 " />
-                </div>
-                <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-                    <div onClick={handleSignOut} className='link'>
-                        <Link to='/signup'>
-                            <p>{name ? (`Welcome ${name}`) : ("Sign IN")}</p>
-                            <p className='font-extrabold md:text-sm'>Account & List</p>
-                        </Link>
+        <div className='shadow-sm sticky top-0 bg-white z-10'>
+            <div className='p-2 max-w-6xl mx-5 lg:mx-auto flex justify-between items-center '>
+                {/* logo  */}
+                <div>
+                    <div className='hidden lg:inline-flex'>
+                        <img src="https://links.papareact.com/ocw"
+                            className='w-10 object-contain'
+                            alt="logo" />
                     </div>
-                    <div className='link'>
-                        <p>Return</p>
-                        <p className='font-extrabold md:text-sm'>& Orders</p>
+                    <div className='inline-flex lg:hidden flex-shrink-0'>
+                        <img src="https://links.papareact.com/jjm" alt="logo"
+                            className=' w-10 object-contain'
+                        />
                     </div>
-                    <div onClick={() => navigate('/cheackout')} className='link relative flex items-center'>
-                        <span className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 rounded-full text-center text-black font-bold'>{item.length}</span>
-                        <ShoppingCartIcon className='h-10' />
-                        <p className='hidden md:inline font-extrabold md:text-sm mt-2 '>Basket</p>
+                </div>
+                {/* search  */}
+                <div className='flex relative rounded-md ml-3'>
+                    <div className='absolute inset-y-0 pl-3 flex items-center pointer-events-none'>
+                        <MagnifyingGlassIcon className="h-6 w-6 text-gray-500 " />
+                    </div>
+                    <input type="text" placeholder='Search..' className='bg-gray-50 w-full pl-10 block sm:text-sm  border-gray-300 rounded-md focus:ring-black  focus:border-black ' />
+                </div>
+                {/* icons */}
+                <div className='flex'>
+                    <div className='flex items-center space-x-4'>
+                        <HomeIcon
+                            onClick={() => navigate('/')}
+                            className='icons' />
+                        <PlusCircleIcon className='icons'
+                            onClick={() => dispatch(setOpen(true))}
+                        />
+                        <PaperAirplaneIcon className='icons -rotate-45' onClick={() => navigate('/message')} />
+                        <ShoppingBagIcon className='icons hidden md:inline-flex' />
+                        <HeartIcon className='icons hidden md:inline-flex' />
+                        {/* <Bars3Icon className='icons' /> */}
+                    </div>
+                    <div className='flex flex-col items-center '
+                        onClick={handleSignOut}
+                    >
+                        <p className="h-8 w-8 bg-gray-200 rounded-full ml-4 " >
+                        </p>
+                        <p className='ml-4'>{selector?.displayName || 'Me'}</p>
                     </div>
                 </div>
             </div>
-            {/* bottom nav */}
-            <div className='flex items-center space-x-3 p-2 pl-6 bg-[#232F3E] text-white text-sm'>
-                <p className='link flex items-center'
-                ><Bars3Icon className='h-6 mr-1' />All
-                </p>
-                <p className='link'>Prime Video</p>
-                <p className='link'>Amazon Business</p>
-                <p className='link'>Today's Deals</p>
-                <p className='link hidden lg:inline-flex'>Electronics</p>
-                <p className='link hidden lg:inline-flex'>Food & Grocry</p>
-                <p className='link hidden lg:inline-flex'>Prime</p>
-                <p className='link hidden lg:inline-flex'>Buy Again</p>
-                <p className='link hidden lg:inline-flex'>Shopper Tool </p>
-                <p className='link hidden lg:inline-flex'>Health & Personal Care</p>
-            </div>
-        </header>
+        </div>
     )
 }
 
 export default Header
+
+
+
+
