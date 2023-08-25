@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { EllipsisHorizontalIcon, HeartIcon, ChatBubbleLeftEllipsisIcon, PaperAirplaneIcon, BookmarkIcon, FaceSmileIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs,  serverTimestamp } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../redux/features/userSlice';
 import { auth, db } from '../firebase';
@@ -16,6 +16,7 @@ const PostCard = ({ id, userName, userImg, img, caption, likes }) => {
     const [edit, setEdit] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [update, setUpdate] = useState(false)
+
     const sendComment = async (e) => {
         e.preventDefault();
         const saveComment = comment;
@@ -37,13 +38,13 @@ const PostCard = ({ id, userName, userImg, img, caption, likes }) => {
     }
     useEffect(() => {
         fetch()
-    }, [])
-    useEffect(() => { }, [id, likes])
+    }, [id,db,auth,comments])
+    useEffect(() => { }, [id, likes,comments])
 
     const handleDelete = async (id) => {
         await deleteDoc(doc(db, 'posts', id))
         console.log('delete successfully')
-        window.location.reload();
+      
     }
     const handleUpdate = (id) => {
         setUpdate(pre=>!pre)
@@ -114,6 +115,7 @@ const PostCard = ({ id, userName, userImg, img, caption, likes }) => {
                 <div key={item.comments} className='flex pl-10 scroll-x'>
                     <p className='font-bold mr-2'>{item.username}</p>
                     <p className='font-semibold'>{item.comments}</p>
+                   
                 </div>
             ))}
 

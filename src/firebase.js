@@ -4,12 +4,12 @@ import {getStorage} from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDdKyX3STo54YBhukpznTF6tK1ELm4QWpQ",
-  authDomain: "mobile-insta-41c09.firebaseapp.com",
-  projectId: "mobile-insta-41c09",
-  storageBucket: "mobile-insta-41c09.appspot.com",
-  messagingSenderId: "599241255406",
-  appId: "1:599241255406:web:ca61fde94899483d7346ff"
+  apiKey: "AIzaSyB4Q_1YoIndkeEm8-NTUA6EBkCM_Hns2sw",
+  authDomain: "deployinsta.firebaseapp.com",
+  projectId: "deployinsta",
+  storageBucket: "deployinsta.appspot.com",
+  messagingSenderId: "569431152028",
+  appId: "1:569431152028:web:907f2ea48e60a91891a459"
 };
   const app = initializeApp(firebaseConfig)
   const auth = getAuth();

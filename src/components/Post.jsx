@@ -19,7 +19,7 @@ const Post = () => {
         fetch()
 
         return fetch
-    }, [])
+    }, [info])
 
 
     return (
